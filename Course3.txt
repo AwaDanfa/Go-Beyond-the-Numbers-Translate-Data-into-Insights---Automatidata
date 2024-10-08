@@ -1,0 +1,565 @@
+<!-- Course 3 Automatidata project
+
+Course 3 - Go Beyond the Numbers: Translate Data into Insights
+
+You are the newest data professional in a fictional data consulting firm: Automatidata. The team is still early into the project, having only just completed an initial plan of action and some early Python coding work.
+
+Luana Rodriquez, the senior data analyst at Automatidata, is pleased with the work you have already completed and requests your assistance with some EDA and data visualization work for the New York City Taxi and Limousine Commission project (New York City TLC) to get a general understanding of what taxi ridership looks like. The management team is asking for a Python notebook showing data structuring and cleaning, as well as any matplotlib/seaborn visualizations plotted to help understand the data. At the very least, include a box plot of the ride durations and some time series plots, like a breakdown by quarter or month.
+
+Additionally, the management team has recently asked all EDA to include Tableau visualizations. For this taxi data, create a Tableau dashboard showing a New York City map of taxi/limo trips by month. Make sure it is easy to understand to someone who isn’t data savvy, and remember that the assistant director at the New York City TLC is a person with visual impairments.
+
+A notebook was structured and prepared to help you in this project. Please complete the following questions.
+
+Course 3 End-of-course project: Exploratory data analysis
+
+In this activity, you will examine data provided and prepare it for analysis. You will also design a professional data visualization that tells a story, and will help data-driven decisions for business needs.
+
+Please note that the Tableau visualization activity is optional, and will not affect your completion of the course. Completing the Tableau activity will help you practice planning out and plotting a data visualization based on a specific business need. The structure of this activity is designed to emulate the proposals you will likely be assigned in your career as a data professional. Completing this activity will help prepare you for those career moments.
+
+The purpose of this project is to conduct exploratory data analysis on a provided data set. Your mission is to continue the investigation you began in C2 and perform further EDA on this data with the aim of learning more about the variables.
+
+The goal is to clean data set and create a visualization.
+
+This activity has 4 parts:
+
+Part 1: Imports, links, and loading
+
+Part 2: Data Exploration
+
+    . Data cleaning
+
+Part 3: Building visualizations
+
+Part 4: Evaluate and share results
+
+
+Follow the instructions and answer the questions below to complete the activity. Then, you will complete an Executive Summary using the questions listed on the PACE Strategy Document.
+
+
+Visualize a story in Tableau and Python
+Throughout these project notebooks, you'll see references to the problem-solving framework PACE. The following notebook components are labeled with the respective PACE stage: Plan, Analyze, Construct, and Execute.
+
+PACE: Plan
+
+In this stage, consider the following questions where applicable to complete your code response:
+
+    Identify any outliers:
+
+    What methods are best for identifying outliers?
+    How do you make the decision to keep or exclude outliers from any future models?
+
+-Methods for identifying outliers: Use box plots and histograms to identify outliers for variables like trip distance, tip amount, and fare amounts. Outliers may represent unusual trips, such as extreme distances or extremely high fares. 
+-Deciding to keep or remove outliers: Consider removing outliers if they represent erroneous data or events that aren't typical of normal taxi operations. However, retain outliers if they are valid but extreme values, as they may represent unique but real situations.
+
+Task 1. Imports, links, and loading
+
+Go to Tableau Public The following link will help you complete this activity. Keep Tableau Public open as you proceed to the next steps.
+
+Link to supporting materials: Tableau Public: https://public.tableau.com/s/
+
+For EDA of the data, import the data and packages that would be most helpful, such as pandas, numpy and matplotlib.
+
+# Import packages and libraries
+#==> ENTER YOUR CODE HERE -->
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+<!-- # Load dataset into dataframe -->
+df = pd.read_csv('2017_Yellow_Taxi_Trip_Data.csv')
+
+<!-- PACE: Analyze
+
+Consider the questions in your PACE Strategy Document to reflect on the Analyze stage.
+
+Task 2a. Data exploration and cleaning
+
+Decide which columns are applicable
+
+The first step is to assess your data. Check the Data Source page on Tableau Public to get a sense of the size, shape and makeup of the data set. Then answer these questions to yourself:
+
+Given our scenario, which data columns are most applicable? Which data columns can I eliminate, knowing they won’t solve our problem scenario?
+
+Consider functions that help you understand and structure the data.
+
+    head()
+    describe()
+    info()
+    groupby()
+    sortby()
+
+What do you do about missing data (if any)?
+
+Are there data outliers? What are they and how might you handle them?
+
+What do the distributions of your variables tell you about the question you're asking or the problem you're trying to solve?
+
+==> ENTER YOUR RESPONSE HERE Missing data can lead to biased results, so it's important to handle it carefully. Outliers are data points that differ significantly from the rest of the dataset and can distort analysis. So, I will need to identify and handle the outliers. The distribution of my variables can provide essential insights into the problem I am trying to solve by revealing patterns, trends, and potential issues in the data.
+
+Start by discovering, using head and size. -->
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv('2017_Yellow_Taxi_Trip_Data.csv')
+<!-- # head() - Displays the first few rows to get an initial glimpse of the dataset. -->
+df.head(10)
+
+#==> ENTER YOUR CODE HERE
+<!-- size() function count items from a given array and give output in the form of a number as size. -->
+print(df.size)
+408582
+<!-- Use describe...
+==> ENTER YOUR CODE HERE -->
+<!-- The describe() method returns description of the data in the DataFrame -->
+df.describe()
+
+<!-- And info. -->
+
+<!-- #==> ENTER YOUR CODE HERE -->
+<!-- The info() method prints information about the DataFrame. -->
+df.info()
+
+<!-- Task 2b. Assess whether dimensions and measures are correct
+On the data source page in Tableau, double check the data types for the applicable columns you selected on the previous step. Pay close attention to the dimensions and measures to assure they are correct.
+
+In Python, consider the data types of the columns. Consider: Do they make sense? No, the dates should be datetime64 and, the categorical data should an object or a category. Wrong data type can be modified by: converting it to numeric: df['column_name'] = pd.to_numeric(df['column_name'], errors='coerce')
+
+converting to categorical: df['column_name'] = df['column_name'].astype('category')
+
+converting to datetime: df['column_name'] = pd.to_datetime(df['column_name'], errors='coerce')
+
+Review the link provided in the previous activity instructions to create the required Tableau visualization. -->
+
+<!-- Task 2c. Select visualization type(s)
+
+Select data visualization types that will help you understand and explain the data.
+
+Now that you know which data columns you’ll use, it is time to decide which data visualization makes the most sense for EDA of the TLC dataset. What type of data visualization(s) would be most helpful?
+
+    Line graph
+    Bar chart
+    Box plot
+    Histogram
+    Heat map
+    Scatter plot
+    A geographic map
+
+==> ENTER YOUR RESPONSE HERE As you'll see below, a bar chart, box plot and scatter plot will be most helpful in your understanding of this data.
+
+A box plot will be helpful to determine outliers and where the bulk of the data points reside in terms of trip_distance, duration, and total_amount
+
+Histogram for continuous variables such as trip_distance, total_amount, and tip_amount.
+
+A scatter plot will be helpful to visualize the trends and patters and outliers of critical variables, such as trip_distance and total_amount
+
+A bar chart will help determine average number of trips per month, weekday, weekend, etc. -->
+
+<!-- PACE: Construct
+
+Consider the questions in your PACE Strategy Document to reflect on the Construct stage.
+Task 3. Data visualization
+
+You’ve assessed your data, and decided on which data variables are most applicable. It’s time to plot your visualization(s)!
+
+Boxplots
+
+Perform a check for outliers on relevant columns such as trip distance and trip duration. Remember, some of the best ways to identify the presence of outliers in data are box plots and histograms.
+
+Note: Remember to convert your date columns to datetime in order to derive total trip duration. -->
+
+<!-- Convert data columns to datetime -->
+<!-- The column df['tpep_pickup_datetime'] contains the pickup datetime information for the taxi trips in my dataset. -->
+df['tpep_pickup_datetime']=pd.to_datetime(df['tpep_pickup_datetime'])
+df['tpep_dropoff_datetime']=pd.to_datetime(df['tpep_dropoff_datetime'])
+
+<!-- Convert date columns to datetime format so, I will calculate the trip duration in minutes -->
+df['trip_duration'] = (df['tpep_dropoff_datetime'] - df['tpep_pickup_datetime']).dt.total_seconds() / 60
+
+<!-- trip distance -->
+<!-- Create box plot of trip_distance -->
+<!-- ==> ENTER YOUR CODE HERE -->
+<!-- figure(figsize=(WIDTH_SIZE,HEIGHT_SIZE)) -->
+plt.figure(figsize=(8,4))
+<!-- The title() method in the Matplotlib module is used to specify the title of the visualization depicted and display the title using various attributes. -->
+plt.title('trip_distance')
+<!-- A box plot (or box-and-whisker plot) shows the distribution of quantitative data in a way that facilitates comparisons between variables or across levels of a categorical variable. The box shows the quartiles of the dataset while the whiskers extend to show the rest of the distribution, except for points that are determined to be “outliers” using a method that is a function of the inter-quartile range.
+#Explanation:
+    #x='trip_distance': Specifies that the trip_distance column should be used for the x-axis.
+    #data=df_cleaned: Specifies the DataFrame that contains the trip_distance column.
+    #fliersize=1: Controls the size of the outlier points (the "fliers") in the box plot, making them smaller and easier to visualize.
+    #plt.title('Box Plot of Trip Distance'): Adds a title to the plot.
+    #plt.show(): Displays the plot.
+This code will generate a box plot showing the distribution of trip distances, with outliers marked as smaller points (due to fliersize=1). 
+sns.boxplot(x='trip_distance', data=df, fliersize=1) -->
+sns.boxplot(data=None, x=df['trip_distance'], fliersize=1)
+
+<!-- Create histogram of trip_distance
+==> ENTER YOUR CODE HERE -->
+plt.figure(figsize=(10,6))
+<!-- The sns. histplot function in Seaborn is designed for drawing histograms -->
+sns.histplot(df['trip_distance'], bins=range(0,27,1))
+plt.title('Trip distance histogram');
+
+<!-- total amount
+Create box plot of total_amount
+==> ENTER YOUR CODE HERE -->
+plt.figure(figsize=(8,3))
+plt.title('total_amount')
+sns.boxplot( x=df['total_amount'], fliersize=1)
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv('2017_Yellow_Taxi_Trip_Data.csv')
+
+<!-- # Create histogram of total_amount
+#==> ENTER YOUR CODE HERE
+#A histogram is a graph showing frequency distributions.It is a graph showing the number of observations within each given interval. -->
+plt.figure(figsize=(10,6))
+sns.histplot(df['total_amount'], bins=range(-5,101,5), kde=False)
+plt.title('Total amount histogram')
+
+<!-- tip amount
+# Create box plot of tip_amount
+#==> ENTER YOUR CODE HERE -->
+plt.figure(figsize=(8,3))
+plt.title('tip_amount')
+sns.boxplot( x=df['tip_amount'], fliersize=1)
+
+
+<!-- # Create histogram of tip_amount
+#==> ENTER YOUR CODE HERE -->
+plt.figure(figsize=(12,6))
+ax = sns.histplot(df['tip_amount'], bins=range(-10, 101, 5))  # Adjusted bins for tip amount
+ax.set_xticks(range(-5, 31, 5))  # Custom x-tick with intervals of 5. Bins start from -5 up to 100 in intervals of 5.
+ax.set_xticklabels(range(-5, 31, 5))  # Ensure tick labels match
+plt.title('Tip Amount Histogram')
+plt.xlabel('Tip Amount')
+plt.ylabel('Frequency')
+
+
+<!-- tip_amount by vendor
+# Create histogram of tip_amount by vendor
+#==> ENTER YOUR CODE HERE -->
+plt.figure(figsize=(12,7))
+ax = sns.histplot(data=df, x='tip_amount', bins=range(0,21,1), # Set x-ticks from 0 to 20 with intervals of 1
+                  hue='VendorID', 
+                  multiple='stack',
+                  palette='deep')
+ax.set_xticks(range(0,21,1))
+ax.set_xticklabels(range(0,21,1))
+plt.title('Tip amount by vendor histogram');
+
+<!-- Next, zoom in on the upper end of the range of tips to check whether vendor one gets noticeably more of the most generous tips. -->
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv('2017_Yellow_Taxi_Trip_Data.csv')
+<!-- # Create histogram of tip_amount by vendor for tips > $10 
+#==> ENTER YOUR CODE HERE -->
+tips_over_ten = df[df['tip_amount'] > 10]
+plt.figure(figsize=(12,7))
+ax = sns.histplot(data=tips_over_ten, x='tip_amount', bins=range(10,21,1), 
+                  hue='VendorID', 
+                  multiple='stack', 
+                  palette='deep')
+ax.set_xticks(range(10, 21, 1))  # Adjust ticks for tips > $10
+plt.title('Tip amount by vendor histogram')
+
+<!-- Mean tips by passenger count
+
+Examine the unique values in the passenger_count column.
+
+#==> ENTER YOUR CODE HERE
+# count the occurrences of each unique value in the passenger_count column. This will return a series showing the unique values of passenger_count and their respective counts, allowing us to see how many trips had 1, 2, or more passengers. -->
+df['passenger_count'].value_counts()
+
+<!-- # Calculate mean tips by passenger_count
+#==> ENTER YOUR CODE HERE -->
+mean_tips_by_passenger_count = df.groupby(['passenger_count']).mean()[['tip_amount']]
+mean_tips_by_passenger_count
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv('2017_Yellow_Taxi_Trip_Data.csv')
+mean_tips_by_passenger_count = df.groupby(['passenger_count']).mean()[['tip_amount']]
+
+# Create bar plot for mean tips by passenger count
+#==> ENTER YOUR CODE HERE
+# creating the dataset
+# Creating the dataset without the first row
+data = mean_tips_by_passenger_count.tail(-1) 
+
+# Creating color palette
+pal = sns.color_palette("PuBuGn_d", len(data))
+rank = data['tip_amount'].argsort().argsort()
+
+# Setting up the figure
+plt.figure(figsize=(10,6))
+
+# Creating the bar plot
+ax = sns.barplot(x=data.index, 
+                 y=data['tip_amount'], 
+                 palette=np.array(pal[::-1])[rank])
+ax.axhline(df['tip_amount'].mean(), ls='--', color='red', label='global mean')
+
+<!-- Adding labels, title, and legend -->
+ax.legend()
+plt.title('Mean tip amount by passenger count', fontsize=14);
+
+<!-- Create month and day columns -->
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv('2017_Yellow_Taxi_Trip_Data.csv')
+df['tpep_pickup_datetime']=pd.to_datetime(df['tpep_pickup_datetime'])
+mean_tips_by_passenger_count = df.groupby(['passenger_count']).mean()[['tip_amount']]
+
+# Create a month column
+#==> ENTER YOUR CODE HERE
+# The column df['tpep_pickup_datetime'] contains the pickup datetime information for the taxi trips in my dataset. This is crucial for time-based analysis, such as aggregating rides by day, month, or hour.
+df['month'] = df['tpep_pickup_datetime'].dt.month_name()
+# Create a day columnt
+#==> ENTER YOUR CODE HERE
+df['day'] = df['tpep_pickup_datetime'].dt.day_name()
+
+<!-- Plot total ride count by month
+
+Begin by calculating total ride count by month.
+# Get total number of rides for each month
+#==> ENTER YOUR CODE HERE -->
+<!-- #To get the total number of rides for each month, I can group the data by the month column after extracting it from the tpep_pickup_datetime column, then count the rides. -->
+df['month'] = df['tpep_pickup_datetime'].dt.month
+# Group by the month and count the total rides
+rides_for_each_month = df.groupby('month').size()
+print(rides_for_each_month)
+
+# Reorder the results to put the months in calendar order.
+rides_for_each_month = df.groupby('month').size()
+# Reorder the monthly ride list so months go in order
+months_order = ['January', 'February', 'March', 'April', 'May', 'June', 
+                'July', 'August', 'September', 'October', 'November', 'December']
+
+rides_for_each_month = df.groupby('month').size()
+# Show the index
+rides_for_each_month.index = rides_for_each_month.index.map({1: 'January', 2: 'February', 3: 'March', 4: 'April',
+                                                   5: 'May', 6: 'June', 7: 'July', 8: 'August',
+                                                   9: 'September', 10: 'October', 11: 'November', 12: 'December'})
+
+rides_for_each_month = rides_for_each_month.reindex(months_order)
+
+# Create a bar plot of total rides per month
+# Setting up the figure
+plt.figure(figsize=(14,6))
+
+# Creating the bar plot
+ax = sns.barplot(x=rides_for_each_month.index, 
+                 y=rides_for_each_month)
+
+ax.set_xticklabels(months_order)
+
+# Adding labels, title, and legend
+
+plt.title('Total rides per month', fontsize=14);
+
+<!-- Plot total ride count by day
+
+Repeat the above process, but now calculate the total rides by day of the week. -->
+
+# Repeat the above process, this time for rides by day
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv('2017_Yellow_Taxi_Trip_Data.csv')
+df['tpep_pickup_datetime'] = pd.to_datetime(df['tpep_pickup_datetime'])
+#df['day'] = df['tpep_pickup_datetime'].dt.day_name()
+# Step 1: Extract the day of the week
+df['day_of_week'] = df['tpep_pickup_datetime'].dt.day_name()
+
+# Step 2: Group by day of the week and count the total rides
+rides_by_day = df.groupby('day_of_week').size()
+
+# Step 3: Reorder the days of the week
+days_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+rides_by_day = rides_by_day.reindex(days_order)
+
+# Create bar plot for ride count by day
+plt.figure(figsize=(14,6))
+ax = sns.barplot(x=rides_by_day.index, y=rides_by_day, palette='spring')
+
+plt.title('Total rides per day of the week', fontsize=14)
+plt.xlabel('Day of the week')
+plt.ylabel('Number of rides')
+
+<!-- Plot total revenue by day of the week
+
+Repeat the above process, but now calculate the total revenue by day of the week.-->
+# Repeat the process, this time for total revenue by day
+# To calculate the total revenue by day of the week, we'll follow a similar process to the one used for calculating total rides. This time, instead of counting the rides, we’ll sum the total_amount for each day of the week to get the total revenue.
+# Step 1: Calculate the total revenue by day of the week
+revenue_by_day = df.groupby('day_of_week')['total_amount'].sum()
+
+# Step 2: Reorder the days of the week
+day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+revenue_by_day = revenue_by_day.reindex(days_order)
+revenue_by_day
+
+# Create bar plot of total revenue by day
+plt.figure(figsize=(14,6))
+ax = sns.barplot(x=revenue_by_day.index, y=revenue_by_day, palette='gnuplot2')
+
+plt.title('Total revenue per day of the week', fontsize=14)
+plt.xlabel('Day of the week')
+plt.ylabel('Total revenue ($)')
+
+<!-- Plot total revenue by month -->
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv('2017_Yellow_Taxi_Trip_Data.csv')
+
+# Repeat the process, this time for total revenue by month
+#==> ENTER YOUR CODE HERE
+# Convert the 'tpep_pickup_datetime' column to datetime format
+df['tpep_pickup_datetime'] = pd.to_datetime(df['tpep_pickup_datetime'])
+# Extract the month from the datetime column
+df['month'] = df['tpep_pickup_datetime'].dt.month_name()
+
+# Group by month and calculate total revenue
+total_amount_month = df.groupby('month').sum()[['total_amount']]
+
+# Define the order of months
+month_order = ['January', 'February', 'March', 'April', 'May', 'June', 
+               'July', 'August', 'September', 'October', 'November', 'December']
+
+# Reorder the DataFrame according to the month order
+total_amount_month = total_amount_month.reindex(month_order)
+
+
+# Display the reordered total amount by month
+total_amount_month
+
+# Create a bar plot of total revenue by month
+#==> ENTER YOUR CODE HERE
+plt.figure(figsize=(16,8))
+
+# Create the bar plot using the total_amount_month DataFrame
+ax = sns.barplot(x=total_amount_month.index, 
+                 y=total_amount_month['total_amount'], 
+                 palette='spring')
+
+# Set plot title and labels
+plt.title('Total revenue by month', fontsize=14)
+plt.xlabel('Month')
+plt.ylabel('Total revenue ($)')
+
+<!-- Scatter plot
+
+You can create a scatterplot in Tableau Public, which can be easier to manipulate and present. If you'd like step by step instructions, you can review the following link. Those instructions create a scatterplot showing the relationship between total_amount and trip_distance. Consider adding the Tableau visualization to your executive summary, and adding key insights from your findings on those two variables.
+
+Tableau visualization guidelines
+
+Plot mean trip distance by drop-off location -->
+# Get number of unique drop-off location IDs
+#==> ENTER YOUR CODE HERE
+# To plot the mean trip distance by drop-off location, I'll first need to identify the unique drop-off locations, 
+# calculate the mean trip distance for each location, and then create a bar plot or scatter plot to visualize the results.
+# Get number of unique drop-off location IDs.
+df['DOLocationID'].nunique()
+
+# Calculate the mean trip distance for each drop-off location
+#==> ENTER YOUR CODE HERE
+distance_by_dropoff = df.groupby('DOLocationID').mean()[['trip_distance']]
+# Sort the results in descending order by mean trip distance
+#==> ENTER YOUR CODE HERE
+# Display the sorted results
+#distance_by_dropoff_sorted = distance_by_dropoff.sort_values(by='trip_distance')
+distance_by_dropoff = distance_by_dropoff.sort_values(by='trip_distance')
+
+# Create a bar plot of mean trip distances by drop-off location in ascending order by distance
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv('2017_Yellow_Taxi_Trip_Data.csv')
+distance_by_dropoff = df.groupby('DOLocationID').mean()[['trip_distance']]
+# Sort the data by 'trip_distance' in ascending order
+distance_by_dropoff_sorted = distance_by_dropoff.sort_values(by='trip_distance', ascending=True)
+
+# Set up the figure for the bar plot
+plt.figure(figsize=(14,6))
+
+# Create the bar plot with sorted data
+ax = sns.barplot(x=distance_by_dropoff_sorted.index, 
+                 y=distance_by_dropoff_sorted['trip_distance'])
+
+# Hide the x-ticks for clarity
+ax.set_xticklabels([])
+ax.set_xticks([])
+
+plt.title('Mean trip distance by drop-off location', fontsize=16);
+
+
+<!-- PACE: Execute
+
+Consider the questions in your PACE Strategy Document to reflect on the Execute stage.
+Task 4a. Results and evaluation
+
+Having built visualizations in Tableau and in Python, what have you learned about the dataset? What other questions have your visualizations uncovered that you should pursue?
+
+Pro tip: Put yourself in your client's perspective, what would they want to know?
+
+Use the following code fields to pursue any additional EDA based on the visualizations you've already plotted. Also use the space to make sure your visualizations are clean, easily understandable, and accessible.
+
+Ask yourself: Did you consider color, contrast, emphasis, and labeling? -->
+
+I have learned that:
+- Trip Distance vs. Total Amount: The scatterplot indicates a positive correlation between trip distance and total amount. Generally, longer trips cost more, but there are outliers where very short trips have high costs (possibly due to surcharges) or long trips have unexpectedly low fares.
+- Monthly and Daily Revenue Trends: Revenue peaks during specific months and days of the week, suggesting potential seasonal and day-of-week patterns.
+- Outliers and Anomalies: There are noticeable outliers in trip distance and fare, particularly where short trips have higher costs. Further investigation may be needed to verify fare accuracy or identify unusual trips.
+- Vendor Comparisons: Differences in trip pricing for similar distances based on vendors suggest variations in pricing models or customer behavior associated with different service providers.
+
+
+My other questions are .... 
+-	What outliers in trip distance and total amount? For example, why do some short trips have abnormally high fares? Investigating these cases could reveal special conditions like airport surcharges, high-demand surcharges, or tolls.
+-	How external factors like weather or events affect taxi rides? Looking at trip trends over time might uncover spikes in demand related to large events, holidays, or weather conditions. This could lead to more accurate predictions for ride volume and pricing.
+-	Is there a significant difference between vendors in terms of ride pricing or customer satisfaction? Comparing the vendors across more variables (e.g., trip duration, fare amount, tips) could show whether one vendor provides a better service, leading to insights on customer behavior or service quality
+
+
+My client would likely want to know ... 
+•	How can they maximize revenue based on these trends? Understanding when and where taxi demand is highest (both geographically and temporally) would help the client allocate resources efficiently and implement surge pricing during peak times.
+•	How can they address outliers and potential pricing discrepancies? The client might want to know why certain trips have unusual pricing and whether this is affecting customer trust or satisfaction. Correcting pricing anomalies could lead to higher customer retention.
+•	Which vendors provide the best value for customers? If the dataset reveals that one vendor consistently offers better pricing for similar trips, the client might want to explore whether they can improve partnerships or adjust pricing strategies to remain competitive.
+
+
+Task 4b. Conclusion
+
+Make it professional and presentable
+
+You have visualized the data you need to share with the director now. Remember, the goal of a data visualization is for an audience member to glean the information on the chart in mere seconds.
+
+Questions to ask yourself for reflection: Why is it important to conduct Exploratory Data Analysis? Why are the data visualizations provided in this notebook useful?
+
+EDA is important because ... ==> ENTER YOUR RESPONSE HERE
+... it helps us uncover patterns, detect anomalies, and test hypotheses before we dive into deeper analyses. It ensures that the dataset is clean, reliable, and provides meaningful insights. EDA highlights trends, outliers, and relationships that might otherwise go unnoticed, allowing us to look at the data with a well-informed perspective. This initial exploration makes sure that the data aligns with business goals and helps us come up with actionable recommendations.
+
+
+Visualizations helped me understand .. ==> ENTER YOUR RESPONSE HERE
+... complex dataset and making patterns clear. For example, the scatterplot between trip_distance and total_amount revealed a generally positive correlation, but also highlighted some outliers where costs were disproportionately high for short distances. The bar charts for total revenue by month and day of the week helped identify peak periods, providing insight into when taxi demand is highest. 
+
+You’ve now completed professional data visualizations according to a business need. Well done!
+
+Congratulations! You've completed this lab. However, you may not notice a green check mark next to this item on Coursera's platform. Please continue your progress regardless of the check mark. Just click on the "save" icon at the top of this notebook to ensure your work has been logged.
